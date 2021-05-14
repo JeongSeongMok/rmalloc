@@ -6,8 +6,9 @@
 rm_header rm_free_list = { 0x0, 0 };
 rm_header rm_used_list = { 0x0, 0 };
 
-rm_option curr_opt = FirstFit;
 void* point = 0x0;
+rm_option curr_opt = FirstFit;
+
 void * rmalloc (size_t s) 
 {
 	int remain_byte;
