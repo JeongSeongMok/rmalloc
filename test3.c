@@ -1,9 +1,7 @@
 /*
    	linkedList.c
-
    	Created on: 22.05.2017
 	Author: Jasper Reichardt
-
 	https://rextester.com/MHA94868
 */
 
@@ -49,12 +47,11 @@ LinkedList * init_list() {
 	list->first = NULL;
 	list->last = NULL;
 	list->size = 0;
-
+	//rmprint();
 	return list;
 }
 
 void insert_end(LinkedList *list, int key, char string[]) {
-	printf("----------------------\n");
 
 	list->size++;                    // increment size of list
 
@@ -73,9 +70,10 @@ void insert_end(LinkedList *list, int key, char string[]) {
 
 
 void insert_beginning(LinkedList *list, int key, char string[]) {
-	printf("----------------------\n");
 
+	rmprint();
 	list->size++;                    // increment size of list
+
 	Node* oldFirst = list->first;    //get the old first node
 
 	/* intialize the new Node */
@@ -206,7 +204,7 @@ char * get_string(LinkedList *list, int key) {
 
 int main(void) {
 	LinkedList *list = init_list();
-
+	
 	insert_beginning(list, 1, "im the first");
 	insert_end(list, 2, "im the second");
 	insert_end(list, 3, "im the third");
@@ -224,4 +222,3 @@ int main(void) {
 
 	return OK;
 }
-
