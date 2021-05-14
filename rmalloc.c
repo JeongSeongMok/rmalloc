@@ -157,7 +157,6 @@ void * rrealloc (void * p, size_t s)
 {
 	rm_header_ptr dest = (rm_header_ptr)p;
 	if(dest->size!=s){
-		printf("p :%p\n",p);
 		rfree(p);
 		
 		rm_header_ptr new_point = rmalloc(s);
