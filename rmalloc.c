@@ -76,9 +76,9 @@ void * rmalloc (size_t s)
 		itr_used = itr_used->next;
 	}
 	if(s==dest->size){
-		itr_used->next = dest;
-		dest = dest->next;
-		itr_used->next->next=0x0;
+		temp->next=dest->next;
+		dest->next=0x0;
+		itr_used->next=dest;
 		dest+=1;
 		return dest;
 	}
