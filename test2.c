@@ -70,16 +70,13 @@ main()
 	while (1) {
 		scanf("%d", &input) ;
 		if (input == 0) {
-			rmprint();
 			break ;
 		}
 		else if (input > 0) {
 			insert_number(input) ;
-			rmprint();
 		}
 		else /* input < 0 */ {
 			remove_number(input * -1) ;
-			rmprint();
 		}
 	}
 	print_numbers() ;
