@@ -11,16 +11,11 @@ rm_option curr_opt = FirstFit;
 
 void * rmalloc (size_t s) 
 {
-	int remain_byte;
-	if(s%sizeof(rm_header)==0) remain_byte=0;
-	else remain_byte = sizeof(rm_header)-s%sizeof(rm_header);
 	rm_header_ptr itr_free = &rm_free_list;
 	rm_header_ptr itr_used = &rm_used_list;
 	rm_header_ptr dest, temp;
 	size_t max_temp=0 , min_temp = -1;
 	int found_checker = 0;
-
-	size_t space_size = s+remain_byte;
 	while(itr_free->next!=0x0){
 		if(curr_opt == WorstFit){
 			if((itr_free->next)->size >= s && (itr_free->next)->size > max_temp){
