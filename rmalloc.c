@@ -82,9 +82,9 @@ void * rmalloc (size_t s)
 		dest+=1;
 		return dest;
 	}
-	
-	rm_header_ptr remain = dest+(sizeof(rm_header)+space_size)/sizeof(rm_header);
-	remain->size = dest->size - space_size - sizeof(rm_header);
+	void *new_point=(void*)dest+s+sizeof(rm_header);
+	rm_header_ptr remain = (rm_header_ptr)new_point;
+	remain->size = dest->size - s - sizeof(rm_header);
 	remain->next = dest->next;
 	
 	itr_used->next = dest;
@@ -98,7 +98,7 @@ void * rmalloc (size_t s)
 void rfree (void * p) 
 {
 	rm_header_ptr dest = p-sizeof(rm_header);
-
+	void *dest_ptr = (void*) dest;
 	rm_header_ptr itr_used = &rm_used_list;
 	rm_header_ptr itr_free = &rm_free_list;
 	while(1){
@@ -106,14 +106,15 @@ void rfree (void * p)
 			itr_used->next = dest->next;
 			break;
 		}
+		
 		itr_used=itr_used->next;
 	}
 	
 	while(1){
-		if(dest < rm_free_list.next){
-			
-			if(dest+(dest->size+dest->size%16+sizeof(rm_header))/sizeof(rm_header)==rm_free_list.next){
-				dest->size += dest->size%16+sizeof(rm_header)+rm_free_list.next->size+rm_free_list.next->size%16;
+		void* itr_free_ptr = (void*)itr_free;
+		if(dest_ptr < (void*)rm_free_list.next){
+			if(dest_ptr+dest->size+sizeof(rm_header)==(void*)rm_free_list.next){
+				dest->size += sizeof(rm_header)+rm_free_list.next->size;
 				dest->next = rm_free_list.next->next;
 				rm_free_list.next = dest;	
 			}
@@ -124,18 +125,18 @@ void rfree (void * p)
 			break;
 		}
 		
-		if(itr_free->next == 0x0 && dest > itr_free){
+		if(itr_free->next == 0x0 && dest_ptr > itr_free_ptr){
 			dest->next = 0x0;
 			itr_free->next = dest;
-			if(dest == itr_free+(itr_free->size+itr_free->size%16+sizeof(rm_header))/sizeof(rm_header)){
-				itr_free->size += itr_free->size%16+sizeof(rm_header)+dest->size+dest->size%16;
+			if(dest_ptr == itr_free_ptr+itr_free->size+sizeof(rm_header)){
+				itr_free->size += sizeof(rm_header)+dest->size;
 				itr_free->next = dest->next;
 			}
 			break;
 		}
-		if(dest>itr_free && dest < itr_free->next){
-			if(dest+(dest->size+dest->size%16+2*sizeof(rm_header))/sizeof(rm_header)==itr_free->next){
-				dest->size += dest->size%16+sizeof(rm_header)+itr_free->next->size+itr_free->next->size%16;
+		if(dest_ptr>itr_free_ptr && dest_ptr < (void*)itr_free->next){
+			if(dest_ptr+dest->size+sizeof(rm_header)==(void*)itr_free->next){
+				dest->size += sizeof(rm_header)+itr_free->next->size;
 				dest->next = itr_free->next->next;	
 				itr_free->next = dest;
 			}
@@ -143,8 +144,8 @@ void rfree (void * p)
 				dest->next = itr_free->next;
 				itr_free->next = dest;
 			}			
-			if(dest == itr_free+(itr_free->size+itr_free->size%16+sizeof(rm_header))/sizeof(rm_header)){
-				itr_free->size += itr_free->size%16+sizeof(rm_header)+dest->size+dest->size%16;
+			if(dest_ptr == itr_free_ptr+itr_free->size+sizeof(rm_header)){
+				itr_free->size += sizeof(rm_header)+dest->size;
 				itr_free->next = dest->next;
 			}
 			break;
