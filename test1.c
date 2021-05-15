@@ -16,7 +16,7 @@ main ()
 	printf("rmalloc(2500):%p\n", p2) ; 
 	rmprint() ;
 
-	rfree(p2) ; 
+	rfree(p1) ; 
 	printf("rfree(%p)\n", p1) ; 
 	rmprint() ;
 
