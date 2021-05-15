@@ -187,7 +187,8 @@ void rmshrink ()
 	rm_header_ptr curr = rm_free_list.next;
 	while(curr!=0x0){
 		rm_header_ptr next = curr->next;
-		munmap(curr, curr->size+sizeof(rm_header));
+		void* curr_ptr = (void*)curr;
+		munmap(curr_ptr, curr->size+sizeof(rm_header));
 		curr=next;
 	}
 	rm_free_list.next = 0x0;
